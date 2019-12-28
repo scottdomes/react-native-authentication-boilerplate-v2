@@ -1,14 +1,20 @@
 import React from 'react';
 import { View, Text, Button } from 'react-native';
+import { login } from '../api/mock';
 
 const LoginScreen = ({ navigation }) => {
+  const loginUser = () => {
+    login('test@test.ca', 'password')
+      .then((val) => {
+        navigation.navigate('Home');
+      })
+      .catch((err) => console.log('error:', err));
+  };
+
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <Text>LoginScreen</Text>
-      <Button
-        title="Log in"
-        onPress={() => navigation.navigate('Home')}
-      />
+      <Button title="Log in" onPress={loginUser} />
       <Button
         title="Create account"
         onPress={() => navigation.navigate('CreateAccount')}
