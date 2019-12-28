@@ -1,14 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, Button } from 'react-native';
 import { login } from '../api/mock';
 
 const LoginScreen = ({ navigation }) => {
+  const [errorMessage, setErrorMessage] = useState('');
   const loginUser = () => {
-    login('test@test.ca', 'password')
-      .then((val) => {
+    setErrorMessage('');
+    login('test@test.ca', 'password', false)
+      .then(() => {
         navigation.navigate('Home');
       })
-      .catch((err) => console.log('error:', err));
+      .catch((res) => setErrorMessage(res.error));
   };
 
   return (
@@ -19,6 +21,7 @@ const LoginScreen = ({ navigation }) => {
         title="Create account"
         onPress={() => navigation.navigate('CreateAccount')}
       />
+      {errorMessage ? <Text>{errorMessage}</Text> : null}
     </View>
   );
 };
