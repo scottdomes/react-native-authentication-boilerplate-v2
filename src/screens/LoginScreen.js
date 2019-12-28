@@ -10,7 +10,7 @@ const LoginScreen = ({ navigation }) => {
       .then(() => {
         navigation.navigate('Home');
       })
-      .catch((res) => setErrorMessage(res.error));
+      .catch((err) => setErrorMessage(err.message));
   };
 
   return (

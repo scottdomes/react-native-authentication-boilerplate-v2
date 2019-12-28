@@ -14,7 +14,7 @@ export const login = (email, password, shouldSucceed = true) => {
   console.log(email, password);
 
   if (!shouldSucceed) {
-    return mockFailure({ error: 'Something went wrong!' });
+    return mockFailure({ error: 500, message: 'Something went wrong!' });
   }
 
   return mockSuccess({ auth_token: 'successful_fake_token' });
@@ -24,7 +24,7 @@ export const createAccount = (email, password, shouldSucceed = true) => {
   console.log(email, password);
 
   if (!shouldSucceed) {
-    return mockFailure({ error: 'Something went wrong!' });
+    return mockFailure({ error: 500, message: 'Something went wrong!' });
   }
 
   return mockSuccess({ auth_token: 'successful_fake_token' });
@@ -36,7 +36,7 @@ export const getUsers = (shouldSucceed = true) => {
   const token = getAuthenticationToken();
 
   if (!shouldSucceed) {
-    return mockFailure({ error: 'Invalid Request' });
+    return mockFailure({ error: 401, message: 'Invalid Request' });
   }
 
   return mockSuccess({
