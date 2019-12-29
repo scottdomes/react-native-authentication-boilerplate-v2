@@ -6,7 +6,8 @@ const CreateAccount = ({ navigation }) => {
   const [errorMessage, setErrorMessage] = useState('');
   const createUser = () => {
     createAccount('test@test.ca', 'password')
-      .then((val) => {
+      .then((res) => {
+        setToken(res.auth_token);
         navigation.navigate('Home');
       })
       .catch((res) => setErrorMessage(res.error));

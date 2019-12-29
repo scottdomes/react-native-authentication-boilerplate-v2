@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, Button } from 'react-native';
 import { getUsers } from '../api/mock';
+import { setToken } from '../api/token';
 
 export default class HomeScreen extends React.Component {
   state = { users: [], hasLoadedUsers: false, userLoadingErrorMessage: '' };
@@ -32,6 +33,11 @@ export default class HomeScreen extends React.Component {
     this.loadUsers();
   }
 
+  logOut = () => {
+    setToken(null);
+    this.props.navigation.navigate('Login');
+  };
+
   render() {
     const { users, userLoadingErrorMessage } = this.state;
     return (
@@ -43,10 +49,7 @@ export default class HomeScreen extends React.Component {
         {userLoadingErrorMessage ? (
           <Text>{userLoadingErrorMessage}</Text>
         ) : null}
-        <Button
-          title="Log out"
-          onPress={() => this.props.navigation.navigate('Login')}
-        />
+        <Button title="Log out" onPress={this.logOut} />
       </View>
     );
   }
