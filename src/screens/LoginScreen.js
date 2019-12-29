@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, Button } from 'react-native';
-import { login } from '../api/mock';
+import { login } from '../api/authentication';
 import EmailForm from '../forms/EmailForm';
 
 const LoginScreen = ({ navigation }) => {

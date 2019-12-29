@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, Button } from 'react-native';
-import { getUsers } from '../api/mock';
+import { getUsers } from '../api/users';
 import { setToken } from '../api/token';
 
 export default class HomeScreen extends React.Component {
@@ -9,12 +9,12 @@ export default class HomeScreen extends React.Component {
   loadUsers() {
     this.setState({ hasLoadedUsers: false, userLoadingErrorMessage: '' });
     getUsers()
-      .then((res) =>
+      .then((users) => {
         this.setState({
           hasLoadedUsers: true,
-          users: res.users,
-        }),
-      )
+          users,
+        });
+      })
       .catch(this.handleUserLoadingError);
   }
 
@@ -45,7 +45,7 @@ export default class HomeScreen extends React.Component {
   }
 
   logOut = async () => {
-    this.setState({ hasLoadedUsers: false, users: [] })
+    this.setState({ hasLoadedUsers: false, users: [] });
     await setToken('');
     this.props.navigation.navigate('Login');
   };

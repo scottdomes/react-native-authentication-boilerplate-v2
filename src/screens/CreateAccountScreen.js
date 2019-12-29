@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, Button } from 'react-native';
-import { createAccount } from '../api/mock';
+import { createAccount } from '../api/authentication';
 import EmailForm from '../forms/EmailForm';
 
 const CreateAccount = ({ navigation }) => {

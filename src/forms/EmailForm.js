@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ScrollView, StyleSheet, TextInput, Button } from 'react-native';
+import { ScrollView, StyleSheet, TextInput, Button, Text } from 'react-native';
 import { setToken } from '../api/token';
 
 const EmailForm = ({ buttonText, onSubmit, children, onAuthentication }) => {
@@ -13,7 +13,13 @@ const EmailForm = ({ buttonText, onSubmit, children, onAuthentication }) => {
         await setToken(res.auth_token);
         onAuthentication();
       })
-      .catch((res) => setErrorMessage(res.error));
+      .catch((res) => {
+        if (res && res.error) {
+          setErrorMessage(res.error);
+        }
+
+        setErrorMessage('Something went wrong.');
+      });
   };
 
   return (
