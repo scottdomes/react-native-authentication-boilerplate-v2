@@ -11,7 +11,7 @@ const AppNavigator = createStackNavigator(
     CreateAccount: CreateAccountScreen,
   },
   {
-    initialRouteName: 'Login',
+    initialRouteName: 'Home',
   },
 );
 

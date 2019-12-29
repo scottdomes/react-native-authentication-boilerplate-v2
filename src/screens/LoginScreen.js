@@ -8,8 +8,8 @@ const LoginScreen = ({ navigation }) => {
   const loginUser = () => {
     setErrorMessage('');
     login('test@test.ca', 'password')
-      .then((res) => {
-        setToken(res.auth_token);
+      .then(async (res) => {
+        await setToken(res.auth_token);
         navigation.navigate('Home');
       })
       .catch((err) => setErrorMessage(err.message));

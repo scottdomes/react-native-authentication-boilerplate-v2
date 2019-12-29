@@ -32,10 +32,10 @@ export const createAccount = (email, password, shouldSucceed = true) => {
   return mockSuccess({ auth_token: 'successful_fake_token' });
 };
 
-export const getUsers = (shouldSucceed = true) => {
-  const token = getToken();
+export const getUsers = async (shouldSucceed = true) => {
+  const token = await getToken();
 
-  if (!shouldSucceed) {
+  if (token !== 'successful_fake_token') {
     return mockFailure({ error: 401, message: 'Invalid Request' });
   }
 
