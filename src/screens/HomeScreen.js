@@ -45,6 +45,7 @@ export default class HomeScreen extends React.Component {
   }
 
   logOut = async () => {
+    this.setState({ hasLoadedUsers: false, users: [] })
     await setToken('');
     this.props.navigation.navigate('Login');
   };
