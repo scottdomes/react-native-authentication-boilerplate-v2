@@ -6,7 +6,7 @@ const LoginScreen = ({ navigation }) => {
   const [errorMessage, setErrorMessage] = useState('');
   const loginUser = () => {
     setErrorMessage('');
-    login('test@test.ca', 'password', false)
+    login('test@test.ca', 'password')
       .then(() => {
         navigation.navigate('Home');
       })
