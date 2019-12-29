@@ -30,7 +30,18 @@ export default class HomeScreen extends React.Component {
   };
 
   componentDidMount() {
-    this.loadUsers();
+    this.didFocusSubscription = this.props.navigation.addListener(
+      'didFocus',
+      () => {
+        if (!this.state.hasLoadedUsers) {
+          this.loadUsers();
+        }
+      },
+    );
+  }
+
+  componentWillUnmount() {
+    this.didFocusSubscription.remove();
   }
 
   logOut = async () => {
