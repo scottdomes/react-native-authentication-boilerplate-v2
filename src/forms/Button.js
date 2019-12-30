@@ -45,7 +45,8 @@ const Button = ({ title, onPress }) => {
     setLoading(true);
     setOrientation(orientation2);
     // setColors(colors2);
-    setTimeout(() => {
+
+    onPress().then(() => {
       setLoading(false);
       setOrientation(orientation1);
       Animated.spring(offset, {
@@ -54,9 +55,7 @@ const Button = ({ title, onPress }) => {
       Animated.spring(scale, {
         toValue: 1,
       }).start();
-    }, 1000);
-
-    onPress();
+    });
   };
 
   const handlePress = () => {
