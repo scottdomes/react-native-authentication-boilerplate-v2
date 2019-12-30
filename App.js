@@ -7,7 +7,14 @@ import CreateAccountScreen from './src/screens/CreateAccountScreen';
 const AppNavigator = createStackNavigator(
   {
     Home: HomeScreen,
-    Login: LoginScreen,
+    Login: {
+      screen: LoginScreen,
+      navigationOptions: {
+        title: 'Login',
+        header: null,
+        gesturesEnabled: false
+      },
+    },
     CreateAccount: CreateAccountScreen,
   },
   {
