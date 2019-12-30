@@ -18,14 +18,17 @@ export const useValidatedField = (defaultValue, validators) => {
 
   const validateField = () => {
     setError('');
+    let hasError = false;
     validators.some((validator) => {
       const err = validator(value);
 
       if (err) {
         setError(err);
+        hasError = true;
         return true;
       }
     });
+    return hasError;
   };
 
   return [value, setValue, validateField, error];

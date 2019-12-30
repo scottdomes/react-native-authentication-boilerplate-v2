@@ -1,8 +1,5 @@
 import React, { useState } from 'react';
-import {
-  ScrollView,
-  StyleSheet,
-} from 'react-native';
+import { ScrollView, StyleSheet } from 'react-native';
 import { setToken } from '../api/token';
 import Field from './Field';
 import {
@@ -24,12 +21,23 @@ const EmailForm = ({ buttonText, onSubmit, children, onAuthentication }) => {
     passwordError,
   ] = useValidatedField('', [validateContent, validateLength]);
 
+  const hasValidationErrors = () => {
+    let error = validateEmail();
+    error = validatePassword();
+
+    return Boolean(error);
+  };
+
   const submit = () => {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
-        validateEmail();
-        validatePassword();
-        reject();
+        const isValid = !hasValidationErrors();
+
+        if (isValid) {
+          reject();
+        } else {
+          resolve();
+        }
       }, 2000);
     });
     // onSubmit(email, password)

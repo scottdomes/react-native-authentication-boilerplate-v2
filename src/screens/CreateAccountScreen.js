@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, Button } from 'react-native';
 import { createAccount } from '../api/authentication';
 import EmailForm from '../forms/EmailForm';
+import Link from '../components/Link';
 
 const CreateAccount = ({ navigation }) => {
   return (
@@ -10,10 +11,9 @@ const CreateAccount = ({ navigation }) => {
       onSubmit={createAccount}
       onAuthentication={() => navigation.navigate('Home')}
     >
-      <Button
-        title="Back to log in"
-        onPress={() => navigation.navigate('Login')}
-      />
+      <Link onPress={() => navigation.navigate('Login')}>
+        Log in to existing account
+      </Link>
     </EmailForm>
   );
 };

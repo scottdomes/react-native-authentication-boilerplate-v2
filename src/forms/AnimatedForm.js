@@ -58,6 +58,7 @@ const styles = StyleSheet.create({
   formContainer: {
     alignItems: 'center',
     justifyContent: 'center',
+    marginBottom: 15
   },
   activityIndicatorContainer: {
     position: 'absolute',
