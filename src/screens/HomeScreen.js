@@ -8,18 +8,20 @@ export default class HomeScreen extends React.Component {
 
   loadUsers() {
     this.setState({ hasLoadedUsers: false, userLoadingErrorMessage: '' });
-    getUsers()
-      .then((users) => {
+    getUsers().then((res) => {
+      if (res.ok) {
         this.setState({
           hasLoadedUsers: true,
-          users,
+          users: res.data,
         });
-      })
-      .catch(this.handleUserLoadingError);
+      } else {
+        this.handleUserLoadingError(res);
+      }
+    });
   }
 
   handleUserLoadingError = (res) => {
-    if (res.error === 401) {
+    if (res.status === 401) {
       this.props.navigation.navigate('Login');
     } else {
       this.setState({

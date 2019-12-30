@@ -19,19 +19,18 @@ const AnimatedForm = ({ children, onSubmit, buttonText }) => {
     setErrorMessage('');
     Animated.timing(opacity, { toValue: 0.2, duration: 200 }).start();
     return onSubmit()
-      .then(() => {
+      .then((res) => {
         setSubmitting(false);
         Animated.timing(opacity, { toValue: 1, duration: 200 }).start();
       })
-      .catch((res) => {
+      .catch((err) => {
         setSubmitting(false);
         Animated.timing(opacity, { toValue: 1, duration: 200 }).start();
-
-        if (res && res.error) {
-          setErrorMessage(res.error);
+        if (err && err.message) {
+          setErrorMessage(err.message);
+        } else {
+          setErrorMessage('Something went wrong.');
         }
-
-        setErrorMessage('Something went wrong.');
       });
   };
 
@@ -44,7 +43,9 @@ const AnimatedForm = ({ children, onSubmit, buttonText }) => {
             <ActivityIndicator size="large" color={GRADIENT_COLORS[1]} />
           </View>
         )}
-        <Animated.View style={{ opacity }}>{children(isSubmitting)}</Animated.View>
+        <Animated.View style={{ opacity }}>
+          {children(isSubmitting)}
+        </Animated.View>
       </View>
       <CustomButton onPress={submit} title={buttonText} />
     </View>
@@ -58,7 +59,7 @@ const styles = StyleSheet.create({
   formContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 15
+    marginBottom: 15,
   },
   activityIndicatorContainer: {
     position: 'absolute',

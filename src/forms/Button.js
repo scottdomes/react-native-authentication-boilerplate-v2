@@ -8,16 +8,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import AnimatedGradient from '../gradients/AnimatedGradient';
-
-const colors1 = ['#FC466B', '#3F5EFB'];
-
-// start={{ x: 0, y: 0 }}
-//     end={{ x: 1, y: 0 }}
-//     colors={['#12c2e9', '#c471ed', '#f64f59']}
-
-const colors2 = ['#240080', '#DA21B7'];
-
-const colors3 = ['blue', 'red'];
+import { GRADIENT_COLORS } from './constants';
 
 const orientation1 = {
   start: { x: 0, y: 0 },
@@ -29,22 +20,15 @@ const orientation2 = {
   end: { x: 5, y: 0 },
 };
 
-const orientation3 = {
-  start: { x: 0, y: 0 },
-  end: { x: 1, y: 1 },
-};
-
 const Button = ({ title, onPress }) => {
   const [offset] = useState(new Animated.Value(1));
   const [scale] = useState(new Animated.Value(1));
   const [isLoading, setLoading] = useState(false);
   const [orientation, setOrientation] = useState(orientation1);
-  const [colors, setColors] = useState(colors1);
 
   const startLoading = () => {
     setLoading(true);
     setOrientation(orientation2);
-    // setColors(colors2);
 
     onPress().then(() => {
       setLoading(false);
@@ -80,7 +64,7 @@ const Button = ({ title, onPress }) => {
       <Animated.View style={{ transform, ...styles.outerContainer }}>
         <AnimatedGradient
           orientation={orientation}
-          colors={colors}
+          colors={GRADIENT_COLORS}
           style={styles.linearGradient}
         >
           <View style={styles.container}>

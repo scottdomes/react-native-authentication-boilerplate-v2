@@ -44,9 +44,14 @@ const EmailForm = ({ buttonText, onSubmit, children, onAuthentication }) => {
   const submit = () => {
     return Promise.all([animationTimeout(), validateAndLogin()]).then(
       async (res) => {
-        if (res[1]) {
-          await setToken(res[1].auth_token);
+        const loginResult = res[1]
+        if (loginResult && loginResult.data && loginResult.data.auth_token) {
+          await setToken(loginResult.data.auth_token);
           onAuthentication();
+        }
+
+        if (loginResult && loginResult.status === 401) {
+          throw new Error('Invalid login.')
         }
       },
     );
@@ -58,6 +63,7 @@ const EmailForm = ({ buttonText, onSubmit, children, onAuthentication }) => {
         {(isSubmitting) => {
           return [
             <Field
+              key="email"
               value={email}
               onChangeText={onChangeEmail}
               keyboardType="email-address"
@@ -66,6 +72,7 @@ const EmailForm = ({ buttonText, onSubmit, children, onAuthentication }) => {
               isSubmitting={isSubmitting}
             />,
             <Field
+              key="password"
               value={password}
               onChangeText={onChangePassword}
               secureTextEntry
