@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ScrollView, StyleSheet } from 'react-native';
+import { StyleSheet, KeyboardAvoidingView } from 'react-native';
 import { setToken } from '../api/token';
 import Field from './Field';
 import {
@@ -8,6 +8,9 @@ import {
   validateLength,
 } from './validators';
 import AnimatedForm from './AnimatedForm';
+
+const animationTimeout = () =>
+  new Promise((resolve) => setTimeout(() => resolve(), 500));
 
 const EmailForm = ({ buttonText, onSubmit, children, onAuthentication }) => {
   const [email, onChangeEmail, validateEmail, emailError] = useValidatedField(
@@ -28,52 +31,53 @@ const EmailForm = ({ buttonText, onSubmit, children, onAuthentication }) => {
     return Boolean(error);
   };
 
+  const validateAndLogin = () => {
+    const isValid = !hasValidationErrors();
+
+    if (isValid) {
+      return onSubmit(email, password);
+    } else {
+      return Promise.resolve();
+    }
+  };
+
   const submit = () => {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        const isValid = !hasValidationErrors();
-
-        if (isValid) {
-          reject();
-        } else {
-          resolve();
+    return Promise.all([animationTimeout(), validateAndLogin()]).then(
+      async (res) => {
+        if (res[1]) {
+          await setToken(res[1].auth_token);
+          onAuthentication();
         }
-      }, 2000);
-    });
-    // onSubmit(email, password)
-    //   .then(async (res) => {
-    //     await setToken(res.auth_token);
-    //     onAuthentication();
-    //   })
-    //   .catch((res) => {
-    //     if (res && res.error) {
-    //       setErrorMessage(res.error);
-    //     }
-
-    //     setErrorMessage('Something went wrong.');
-    //   });
+      },
+    );
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
       <AnimatedForm onSubmit={submit} buttonText={buttonText}>
-        <Field
-          value={email}
-          onChangeText={onChangeEmail}
-          keyboardType="email-address"
-          label="Email"
-          error={emailError}
-        />
-        <Field
-          value={password}
-          onChangeText={onChangePassword}
-          secureTextEntry
-          label="Password"
-          error={passwordError}
-        />
+        {(isSubmitting) => {
+          return [
+            <Field
+              value={email}
+              onChangeText={onChangeEmail}
+              keyboardType="email-address"
+              label="Email"
+              error={emailError}
+              isSubmitting={isSubmitting}
+            />,
+            <Field
+              value={password}
+              onChangeText={onChangePassword}
+              secureTextEntry
+              label="Password"
+              error={passwordError}
+              isSubmitting={isSubmitting}
+            />,
+          ];
+        }}
       </AnimatedForm>
       {children}
-    </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 

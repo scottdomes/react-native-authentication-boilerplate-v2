@@ -44,7 +44,7 @@ const AnimatedForm = ({ children, onSubmit, buttonText }) => {
             <ActivityIndicator size="large" color={GRADIENT_COLORS[1]} />
           </View>
         )}
-        <Animated.View style={{ opacity }}>{children}</Animated.View>
+        <Animated.View style={{ opacity }}>{children(isSubmitting)}</Animated.View>
       </View>
       <CustomButton onPress={submit} title={buttonText} />
     </View>
