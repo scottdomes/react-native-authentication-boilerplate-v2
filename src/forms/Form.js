@@ -10,9 +10,10 @@ const getInitialState = (fieldKeys) => {
   return state;
 };
 
-const Form = ({ fields, buttonText, action }) => {
+const Form = ({ fields, buttonText, action, afterSubmit }) => {
   const fieldKeys = Object.keys(fields);
   const [values, setValues] = useState(getInitialState(fieldKeys));
+  const [errorMessage, setErrorMessage] = useState('');
 
   const onChangeValue = (key, value) => {
     const newState = { ...values, [key]: value };
@@ -26,11 +27,16 @@ const Form = ({ fields, buttonText, action }) => {
   const submit = async () => {
     const values = getValues();
     const result = await action(...values);
-    console.log(result);
+    try {
+      await afterSubmit(result);
+    } catch (e) {
+      setErrorMessage(e.message);
+    }
   };
 
   return (
     <View>
+      <Text>{errorMessage}</Text>
       {fieldKeys.map((key) => {
         const field = fields[key];
         return (
