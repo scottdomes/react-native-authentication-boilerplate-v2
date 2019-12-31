@@ -6,11 +6,7 @@ import Link from '../components/Link';
 
 const LoginScreen = ({ navigation }) => {
   return (
-    <LoginForm
-      buttonText="Log in"
-      onSubmit={login}
-      onAuthentication={() => navigation.navigate('Home')}
-    >
+    <LoginForm onAuthentication={() => navigation.navigate('Home')}>
       <Link onPress={() => navigation.navigate('CreateAccount')}>
         Create account
       </Link>

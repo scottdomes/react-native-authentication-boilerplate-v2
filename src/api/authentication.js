@@ -6,7 +6,7 @@ export const login = (email, password) => {
   });
 };
 
-export const createAccount = (email, password) => {
+export const createAccount = (email, firstName, password) => {
   return post('/users', {
     user: { email, password },
   });
