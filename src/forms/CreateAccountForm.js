@@ -4,12 +4,7 @@ import { validateContent, validateLength } from './validators';
 import { createAccount } from '../api/authentication';
 import Form from './Form';
 
-const CreateAccountForm = ({
-  buttonText,
-  onSubmit,
-  children,
-  onAuthentication,
-}) => {
+const CreateAccountForm = ({ children, onAuthentication }) => {
   const handleResult = async (loginResult) => {
     if (loginResult && loginResult.data && loginResult.data.auth_token) {
       await setToken(loginResult.data.auth_token);

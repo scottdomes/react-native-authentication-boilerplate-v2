@@ -4,10 +4,7 @@ import { validateContent, validateLength } from './validators';
 import { login } from '../api/authentication';
 import Form from './Form';
 
-const animationTimeout = () =>
-  new Promise((resolve) => setTimeout(() => resolve(), 500));
-
-const LoginForm = ({ buttonText, onSubmit, children, onAuthentication }) => {
+const LoginForm = ({ children, onAuthentication }) => {
   const handleResult = async (loginResult) => {
     if (loginResult && loginResult.data && loginResult.data.auth_token) {
       await setToken(loginResult.data.auth_token);

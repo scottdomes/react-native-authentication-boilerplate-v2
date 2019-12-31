@@ -3,6 +3,7 @@ import { createStackNavigator } from 'react-navigation-stack';
 import LoginScreen from './src/screens/LoginScreen';
 import HomeScreen from './src/screens/HomeScreen';
 import CreateAccountScreen from './src/screens/CreateAccountScreen';
+import ForgotPasswordScreen from './src/screens/ForgotPasswordScreen';
 
 const AppNavigator = createStackNavigator(
   {
@@ -16,6 +17,7 @@ const AppNavigator = createStackNavigator(
       },
     },
     CreateAccount: CreateAccountScreen,
+    ForgotPassword: ForgotPasswordScreen
   },
   {
     initialRouteName: 'Home',

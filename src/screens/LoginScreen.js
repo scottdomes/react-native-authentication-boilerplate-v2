@@ -10,7 +10,9 @@ const LoginScreen = ({ navigation }) => {
       <Link onPress={() => navigation.navigate('CreateAccount')}>
         Create account
       </Link>
-      <Link onPress={() => {}}>Forgot password?</Link>
+      <Link onPress={() => navigation.navigate('ForgotPassword')}>
+        Forgot password?
+      </Link>
     </LoginForm>
   );
 };
