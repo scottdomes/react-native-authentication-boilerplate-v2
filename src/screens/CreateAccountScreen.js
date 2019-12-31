@@ -7,7 +7,7 @@ import Link from '../components/Link';
 const CreateAccount = ({ navigation }) => {
   return (
     <CreateAccountForm
-      buttonText="Sign up"
+      buttonText="Sign usspss"
       onSubmit={createAccount}
       onAuthentication={() => navigation.navigate('Home')}
     >
