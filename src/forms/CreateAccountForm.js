@@ -19,10 +19,9 @@ const getInitialState = (fields) => {
   return state;
 };
 
-const Form = ({ fields, buttonText }) => {
+const Form = ({ fields, buttonText, children }) => {
   const [values, setValues] = useState(getInitialState(fields));
   const [errors, setErrors] = useState(getInitialState(fields));
-  const [isSubmitting, setSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
   const onChangeValue = (key, value) => {
@@ -30,8 +29,28 @@ const Form = ({ fields, buttonText }) => {
     setValues(newState);
   };
 
+  const validateFields = () => {
+    const newErrors = getInitialState(fields);
+    Object.keys(fields).forEach((key) => {
+      const field = fields[key];
+
+      if (field.validators && field.validators.length > 0) {
+        const value = values[key];
+        let error = '';
+        field.validators.forEach((validator) => {
+          const validationError = validator(value);
+          if (validationError) {
+            error = validationError;
+          }
+        });
+        newErrors[key] = error;
+      }
+    });
+    setErrors(newErrors);
+  };
+
   const submit = () => {
-    console.log(values);
+    validateFields();
 
     return new Promise((resolve) => {
       setTimeout(() => {
@@ -41,23 +60,29 @@ const Form = ({ fields, buttonText }) => {
   };
 
   return (
-    <View style={styles.container}>
-      {Object.keys(fields).map((key) => {
-        const field = fields[key];
-        console.log(field);
-        return (
-          <Field
-            key={key}
-            value={values[key]}
-            onChangeText={(text) => onChangeValue(key, text)}
-            error={errors[key]}
-            isSubmitting={isSubmitting}
-            {...field}
-          />
-        );
-      })}
-      <CustomButton onPress={submit} title={buttonText} />
-    </View>
+    <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
+      <AnimatedForm onSubmit={submit} buttonText={buttonText}>
+        {(isSubmitting) => {
+          return [
+            ...Object.keys(fields).map((key) => {
+              const field = fields[key];
+
+              return (
+                <Field
+                  key={key}
+                  value={values[key]}
+                  onChangeText={(text) => onChangeValue(key, text)}
+                  error={errors[key]}
+                  isSubmitting={isSubmitting}
+                  {...field}
+                />
+              );
+            }),
+          ];
+        }}
+      </AnimatedForm>
+      {children}
+    </KeyboardAvoidingView>
   );
 };
 
@@ -69,10 +94,21 @@ const CreateAccountForm = ({
 }) => {
   return (
     <Form
-      buttonText="Complete"
+      buttonText="Sign up"
       fields={{
         firstName: {
           label: 'First name',
+          validators: [validateContent],
+        },
+        email: {
+          label: 'Email',
+          validators: [validateContent],
+          keyboardType: 'email-address',
+        },
+        password: {
+          label: 'Password',
+          validators: [validateContent, validateLength],
+          secureTextEntry: true,
         },
       }}
     />
