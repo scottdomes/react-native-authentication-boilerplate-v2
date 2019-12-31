@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { View, Text, Button } from 'react-native';
 import { login } from '../api/authentication';
-import EmailForm from '../forms/EmailForm';
+import LoginForm from '../forms/LoginForm';
 import Link from '../components/Link';
 
 const LoginScreen = ({ navigation }) => {
   return (
-    <EmailForm
+    <LoginForm
       buttonText="Log in"
       onSubmit={login}
       onAuthentication={() => navigation.navigate('Home')}
@@ -15,7 +15,7 @@ const LoginScreen = ({ navigation }) => {
         Create account
       </Link>
       <Link onPress={() => {}}>Forgot password?</Link>
-    </EmailForm>
+    </LoginForm>
   );
 };
 

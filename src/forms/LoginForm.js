@@ -12,7 +12,7 @@ import AnimatedForm from './AnimatedForm';
 const animationTimeout = () =>
   new Promise((resolve) => setTimeout(() => resolve(), 500));
 
-const EmailForm = ({ buttonText, onSubmit, children, onAuthentication }) => {
+const LoginForm = ({ buttonText, onSubmit, children, onAuthentication }) => {
   const [email, onChangeEmail, validateEmail, emailError] = useValidatedField(
     '',
     [validateContent],
@@ -96,4 +96,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default EmailForm;
+export default LoginForm;
