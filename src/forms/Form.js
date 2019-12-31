@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Text, TextInput, View, Button } from 'react-native';
+import FieldValidator from './FieldValidator';
 
 const getInitialState = (fieldKeys) => {
   const state = {};
@@ -37,19 +38,25 @@ const Form = ({ fields, buttonText, action, afterSubmit }) => {
   return (
     <View>
       <Text>{errorMessage}</Text>
-      {fieldKeys.map((key) => {
-        const field = fields[key];
-        return (
-          <View key={key}>
-            <Text>{field.label}</Text>
-            <TextInput
-              {...field.inputProps}
-              value={values[key]}
-              onChangeText={(text) => onChangeValue(key, text)}
-            />
-          </View>
-        );
-      })}
+      <FieldValidator fields={fields} values={values}>
+        {(errors) =>
+          fieldKeys.map((key) => {
+            const field = fields[key];
+            const error = errors[key]
+            return (
+              <View key={key}>
+                <Text>{field.label}</Text>
+                <TextInput
+                  {...field.inputProps}
+                  value={values[key]}
+                  onChangeText={(text) => onChangeValue(key, text)}
+                />
+                <Text>{error}</Text>
+              </View>
+            );
+          })
+        }
+      </FieldValidator>
       <Button title={buttonText} onPress={submit} />
     </View>
   );

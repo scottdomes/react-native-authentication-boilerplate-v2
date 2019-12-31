@@ -2,6 +2,7 @@ import React from 'react';
 import Form from '../forms/Form';
 import { login } from '../api/authentication';
 import { setToken } from '../api/token';
+import { validateContent, validateLength } from '../forms/validation';
 
 const LoginScreen = ({ navigation }) => {
   const handleResult = async (result) => {
@@ -23,12 +24,14 @@ const LoginScreen = ({ navigation }) => {
       fields={{
         email: {
           label: 'Email',
+          validators: [validateContent],
           inputProps: {
             keyboardType: 'email-address',
           },
         },
         password: {
           label: 'Password',
+          validators: [validateContent, validateLength],
           inputProps: {
             secureTextEntry: true,
           },
