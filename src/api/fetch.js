@@ -1,10 +1,9 @@
 import { API_URL } from '../../secrets';
 import { getToken } from './token';
 
-const formatResults = async (result) => {
+const formatResult = async (result) => {
   const formatted = {
     status: result.status,
-    message: result.message,
     ok: result.ok,
   };
 
@@ -38,7 +37,7 @@ export const post = async (destination, body) => {
     body: JSON.stringify(body),
   });
 
-  const formattedResult = await resultFormatter(result);
+  const formattedResult = await formatResult(result);
   return formattedResult;
 };
 
@@ -50,6 +49,6 @@ export const get = async (destination) => {
     headers,
   });
 
-  const formattedResult = await resultFormatter(result);
+  const formattedResult = await formatResult(result);
   return formattedResult;
 };

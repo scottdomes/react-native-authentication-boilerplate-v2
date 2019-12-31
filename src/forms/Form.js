@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text, TextInput, View } from 'react-native';
+import { Text, TextInput, View, Button } from 'react-native';
 
 const getInitialState = (fieldKeys) => {
   const state = {};
@@ -10,7 +10,7 @@ const getInitialState = (fieldKeys) => {
   return state;
 };
 
-const Form = ({ fields }) => {
+const Form = ({ fields, buttonText, action }) => {
   const fieldKeys = Object.keys(fields);
   const [values, setValues] = useState(getInitialState(fieldKeys));
 
@@ -19,19 +19,34 @@ const Form = ({ fields }) => {
     setValues(newState);
   };
 
-  return fieldKeys.map((key) => {
-    const field = fields[key];
-    return (
-      <View key={key}>
-        <Text>{field.label}</Text>
-        <TextInput
-          {...field.inputProps}
-          value={values[key]}
-          onChangeText={(text) => onChangeValue(key, text)}
-        />
-      </View>
-    );
-  });
+  const getValues = () => {
+    return fieldKeys.sort().map((key) => values[key]);
+  };
+
+  const submit = async () => {
+    const values = getValues();
+    const result = await action(...values);
+    console.log(result);
+  };
+
+  return (
+    <View>
+      {fieldKeys.map((key) => {
+        const field = fields[key];
+        return (
+          <View key={key}>
+            <Text>{field.label}</Text>
+            <TextInput
+              {...field.inputProps}
+              value={values[key]}
+              onChangeText={(text) => onChangeValue(key, text)}
+            />
+          </View>
+        );
+      })}
+      <Button title={buttonText} onPress={submit} />
+    </View>
+  );
 };
 
 export default Form;
