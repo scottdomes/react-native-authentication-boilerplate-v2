@@ -1,5 +1,12 @@
 import React, { useState } from 'react';
-import { Text, TextInput, View, Button, StyleSheet } from 'react-native';
+import {
+  Text,
+  TextInput,
+  View,
+  Button,
+  StyleSheet,
+  Animated,
+} from 'react-native';
 import { validateFields, hasValidationError } from '../forms/validation';
 import Field from './Field';
 import SubmitButton from './SubmitButton';
@@ -20,6 +27,7 @@ const Form = ({ fields, buttonText, action, afterSubmit }) => {
   const [validationErrors, setValidationErrors] = useState(
     getInitialState(fieldKeys),
   );
+  const [opacity] = useState(new Animated.Value(1));
 
   const onChangeValue = (key, value) => {
     const newState = { ...values, [key]: value };
@@ -35,38 +43,49 @@ const Form = ({ fields, buttonText, action, afterSubmit }) => {
     return fieldKeys.sort().map((key) => values[key]);
   };
 
+  const fadeOut = () =>
+    Animated.timing(opacity, { toValue: 0.2, duration: 200 }).start();
+
+  const fadeIn = () =>
+    Animated.timing(opacity, { toValue: 1, duration: 200 }).start();
+
   const submit = async () => {
     setErrorMessage('');
     setValidationErrors(getInitialState(fieldKeys));
 
     const errors = validateFields(fields, values);
     if (hasValidationError(errors)) {
-      console.log(errors);
       return setValidationErrors(errors);
     }
+
+    fadeOut();
     const result = await action(...getValues());
     try {
       await afterSubmit(result);
+      fadeIn();
     } catch (e) {
       setErrorMessage(e.message);
+      fadeIn();
     }
   };
 
   return (
     <View style={styles.container}>
       <Text style={styles.error}>{errorMessage}</Text>
-      {fieldKeys.map((key) => {
-        return (
-          <Field
-            key={key}
-            fieldName={key}
-            field={fields[key]}
-            error={validationErrors[key]}
-            onChangeText={onChangeValue}
-            value={values[key]}
-          />
-        );
-      })}
+      <Animated.View style={{ opacity }}>
+        {fieldKeys.map((key) => {
+          return (
+            <Field
+              key={key}
+              fieldName={key}
+              field={fields[key]}
+              error={validationErrors[key]}
+              onChangeText={onChangeValue}
+              value={values[key]}
+            />
+          );
+        })}
+      </Animated.View>
       <SubmitButton title={buttonText} onPress={submit} />
     </View>
   );
