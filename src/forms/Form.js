@@ -6,6 +6,7 @@ import {
   Button,
   StyleSheet,
   Animated,
+  ActivityIndicator,
 } from 'react-native';
 import { validateFields, hasValidationError } from '../forms/validation';
 import Field from './Field';
@@ -28,6 +29,7 @@ const Form = ({ fields, buttonText, action, afterSubmit }) => {
     getInitialState(fieldKeys),
   );
   const [opacity] = useState(new Animated.Value(1));
+  const [isSubmitting, setSubmitting] = useState(false);
 
   const onChangeValue = (key, value) => {
     const newState = { ...values, [key]: value };
@@ -50,6 +52,7 @@ const Form = ({ fields, buttonText, action, afterSubmit }) => {
     Animated.timing(opacity, { toValue: 1, duration: 200 }).start();
 
   const submit = async () => {
+    setSubmitting(true);
     setErrorMessage('');
     setValidationErrors(getInitialState(fieldKeys));
 
@@ -59,12 +62,13 @@ const Form = ({ fields, buttonText, action, afterSubmit }) => {
     }
 
     fadeOut();
-    const result = await action(...getValues());
     try {
+      const result = await action(...getValues());
       await afterSubmit(result);
       fadeIn();
     } catch (e) {
       setErrorMessage(e.message);
+      setSubmitting(false);
       fadeIn();
     }
   };
@@ -72,6 +76,11 @@ const Form = ({ fields, buttonText, action, afterSubmit }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.error}>{errorMessage}</Text>
+      {isSubmitting && (
+        <View style={styles.activityIndicatorContainer}>
+          <ActivityIndicator size="large" color="#3F5EFB" />
+        </View>
+      )}
       <Animated.View style={{ opacity }}>
         {fieldKeys.map((key) => {
           return (
@@ -86,7 +95,7 @@ const Form = ({ fields, buttonText, action, afterSubmit }) => {
           );
         })}
       </Animated.View>
-      <SubmitButton title={buttonText} onPress={submit} />
+      <SubmitButton title={buttonText} onPress={submit} isSubmitting={isSubmitting} />
     </View>
   );
 };
@@ -97,6 +106,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 15,
+    position: 'relative',
+  },
+  activityIndicatorContainer: {
+    position: 'absolute',
+    flex: 1,
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 2,
   },
   error: {
     marginBottom: 20,

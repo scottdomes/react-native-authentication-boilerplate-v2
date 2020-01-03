@@ -5,9 +5,10 @@ import {
   Text,
   StyleSheet,
   Animated,
+  ActivityIndicator,
 } from 'react-native';
 
-const SubmitButton = ({ title, onPress }) => {
+const SubmitButton = ({ title, onPress, isSubmitting }) => {
   const [offset] = useState(new Animated.Value(1));
   const [scale] = useState(new Animated.Value(1));
 
@@ -37,7 +38,13 @@ const SubmitButton = ({ title, onPress }) => {
   return (
     <TouchableWithoutFeedback onPressIn={handlePress}>
       <Animated.View style={{ transform, ...styles.container }}>
-        <Text style={styles.text}>{title}</Text>
+        <View style={styles.container}>
+          {isSubmitting ? (
+            <ActivityIndicator size="small" color="#FFFFFF" />
+          ) : (
+            <Text style={styles.text}>{title}</Text>
+          )}
+        </View>
       </Animated.View>
     </TouchableWithoutFeedback>
   );
