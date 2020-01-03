@@ -21,6 +21,9 @@ const getInitialState = (fieldKeys) => {
   return state;
 };
 
+const animationTimeout = () =>
+  new Promise((resolve) => setTimeout(resolve, 700));
+
 const Form = ({ fields, buttonText, action, afterSubmit }) => {
   const fieldKeys = Object.keys(fields);
   const [values, setValues] = useState(getInitialState(fieldKeys));
@@ -51,27 +54,31 @@ const Form = ({ fields, buttonText, action, afterSubmit }) => {
   const fadeIn = () =>
     Animated.timing(opacity, { toValue: 1, duration: 200 }).start();
 
-  const submit = async () => {
-    setSubmitting(true);
-    setErrorMessage('');
-    setValidationErrors(getInitialState(fieldKeys));
+const submit = async () => {
+  setSubmitting(true);
+  setErrorMessage('');
+  setValidationErrors(getInitialState(fieldKeys));
 
-    const errors = validateFields(fields, values);
-    if (hasValidationError(errors)) {
-      return setValidationErrors(errors);
-    }
+  const errors = validateFields(fields, values);
+  if (hasValidationError(errors)) {
+    setSubmitting(false);
+    return setValidationErrors(errors);
+  }
 
-    fadeOut();
-    try {
-      const result = await action(...getValues());
-      await afterSubmit(result);
-      fadeIn();
-    } catch (e) {
-      setErrorMessage(e.message);
-      setSubmitting(false);
-      fadeIn();
-    }
-  };
+  fadeOut();
+  try {
+    const [result] = await Promise.all([
+      action(...getValues()),
+      animationTimeout(),
+    ]);
+    await afterSubmit(result);
+    fadeIn();
+  } catch (e) {
+    setErrorMessage(e.message);
+    setSubmitting(false);
+    fadeIn();
+  }
+};
 
   return (
     <View style={styles.container}>
@@ -95,7 +102,11 @@ const Form = ({ fields, buttonText, action, afterSubmit }) => {
           );
         })}
       </Animated.View>
-      <SubmitButton title={buttonText} onPress={submit} isSubmitting={isSubmitting} />
+      <SubmitButton
+        title={buttonText}
+        onPress={submit}
+        isSubmitting={isSubmitting}
+      />
     </View>
   );
 };
