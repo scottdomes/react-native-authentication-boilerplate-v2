@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Text, TextInput, View, Button, StyleSheet } from 'react-native';
 import { validateFields, hasValidationError } from '../forms/validation';
 import Field from './Field';
-import SubmitButton from './SubmitButton'
+import SubmitButton from './SubmitButton';
 
 const getInitialState = (fieldKeys) => {
   const state = {};
@@ -81,6 +81,7 @@ const styles = StyleSheet.create({
   },
   error: {
     marginBottom: 20,
+    height: 17.5,
   },
 });
 

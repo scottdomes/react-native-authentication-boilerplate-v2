@@ -1,12 +1,44 @@
 import React, { useState } from 'react';
-import { TouchableWithoutFeedback, View, Text, StyleSheet } from 'react-native';
+import {
+  TouchableWithoutFeedback,
+  View,
+  Text,
+  StyleSheet,
+  Animated,
+} from 'react-native';
 
 const SubmitButton = ({ title, onPress }) => {
+  const [offset] = useState(new Animated.Value(1));
+  const [scale] = useState(new Animated.Value(1));
+
+  const handlePress = async () => {
+    Animated.spring(offset, {
+      toValue: 5,
+    }).start();
+    Animated.spring(scale, {
+      toValue: 0.96,
+    }).start();
+
+    await onPress();
+    Animated.spring(offset, {
+      toValue: 0,
+    }).start();
+    Animated.spring(scale, {
+      toValue: 1,
+    }).start();
+  };
+
+  const transform = [
+    { translateY: offset },
+    { scaleY: scale },
+    { scaleX: scale },
+  ];
+
   return (
-    <TouchableWithoutFeedback onPressIn={onPress}>
-      <View style={styles.container}>
+    <TouchableWithoutFeedback onPressIn={handlePress}>
+      <Animated.View style={{ transform, ...styles.container }}>
         <Text style={styles.text}>{title}</Text>
-      </View>
+      </Animated.View>
     </TouchableWithoutFeedback>
   );
 };
