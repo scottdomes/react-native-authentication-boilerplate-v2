@@ -7,6 +7,7 @@ import {
   StyleSheet,
   Animated,
   ActivityIndicator,
+  KeyboardAvoidingView,
 } from 'react-native';
 import { validateFields, hasValidationError } from '../forms/validation';
 import Field from './Field';
@@ -54,34 +55,34 @@ const Form = ({ fields, buttonText, action, afterSubmit }) => {
   const fadeIn = () =>
     Animated.timing(opacity, { toValue: 1, duration: 200 }).start();
 
-const submit = async () => {
-  setSubmitting(true);
-  setErrorMessage('');
-  setValidationErrors(getInitialState(fieldKeys));
+  const submit = async () => {
+    setSubmitting(true);
+    setErrorMessage('');
+    setValidationErrors(getInitialState(fieldKeys));
 
-  const errors = validateFields(fields, values);
-  if (hasValidationError(errors)) {
-    setSubmitting(false);
-    return setValidationErrors(errors);
-  }
+    const errors = validateFields(fields, values);
+    if (hasValidationError(errors)) {
+      setSubmitting(false);
+      return setValidationErrors(errors);
+    }
 
-  fadeOut();
-  try {
-    const [result] = await Promise.all([
-      action(...getValues()),
-      animationTimeout(),
-    ]);
-    await afterSubmit(result);
-    fadeIn();
-  } catch (e) {
-    setErrorMessage(e.message);
-    setSubmitting(false);
-    fadeIn();
-  }
-};
+    fadeOut();
+    try {
+      const [result] = await Promise.all([
+        action(...getValues()),
+        animationTimeout(),
+      ]);
+      await afterSubmit(result);
+      fadeIn();
+    } catch (e) {
+      setErrorMessage(e.message);
+      setSubmitting(false);
+      fadeIn();
+    }
+  };
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
       <Text style={styles.error}>{errorMessage}</Text>
       {isSubmitting && (
         <View style={styles.activityIndicatorContainer}>
@@ -107,7 +108,7 @@ const submit = async () => {
         onPress={submit}
         isSubmitting={isSubmitting}
       />
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 
