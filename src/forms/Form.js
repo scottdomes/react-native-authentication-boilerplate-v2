@@ -64,9 +64,9 @@ const Form = ({ fields, buttonText, action, afterSubmit }) => {
     fadeOut();
     if (hasValidationError(errors)) {
       await animationTimeout();
-      setSubmitting(false);
       fadeIn();
-      return setValidationErrors(errors);
+      setValidationErrors(errors);
+      return setSubmitting(false);
     }
 
     try {

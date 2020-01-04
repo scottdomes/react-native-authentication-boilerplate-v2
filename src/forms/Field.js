@@ -4,34 +4,38 @@ import { Text, TextInput, View, StyleSheet, Animated } from 'react-native';
 export default class Field extends React.Component {
   position = new Animated.Value(0);
 
-  shiftPosition() {
+  shiftPosition(distance) {
     const duration = 50;
-    Animated.timing(this.position, {
+    return Animated.timing(this.position, {
       toValue: distance,
       duration,
       useNativeDriver: true,
     });
   }
 
-  startShake() {
+  startShake = () => {
     const distance = 8;
 
     Animated.sequence([
-      shiftPosition(distance),
-      shiftPosition(-distance),
-      shiftPosition(distance),
-      shiftPosition(-distance),
-      shiftPosition(distance),
-      shiftPosition(0),
+      this.shiftPosition(distance),
+      this.shiftPosition(-distance),
+      this.shiftPosition(distance),
+      this.shiftPosition(-distance),
+      this.shiftPosition(distance),
+      this.shiftPosition(0),
     ]).start();
-  }
+  };
 
   shake() {
     setTimeout(this.startShake, 100);
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.isSubmitting && !this.props.isSubmitting & this.props.error) {
+    if (
+      prevProps.isSubmitting &&
+      !this.props.isSubmitting &&
+      this.props.error
+    ) {
       this.shake();
     }
   }
