@@ -95,6 +95,7 @@ const Form = ({ fields, buttonText, action, afterSubmit }) => {
         {fieldKeys.map((key) => {
           return (
             <Field
+              isSubmitting={isSubmitting}
               key={key}
               fieldName={key}
               field={fields[key]}
