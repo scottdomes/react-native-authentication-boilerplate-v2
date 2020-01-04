@@ -61,12 +61,14 @@ const Form = ({ fields, buttonText, action, afterSubmit }) => {
     setValidationErrors(getInitialState(fieldKeys));
 
     const errors = validateFields(fields, values);
+    fadeOut();
     if (hasValidationError(errors)) {
+      await animationTimeout();
       setSubmitting(false);
+      fadeIn();
       return setValidationErrors(errors);
     }
 
-    fadeOut();
     try {
       const [result] = await Promise.all([
         action(...getValues()),
@@ -84,12 +86,12 @@ const Form = ({ fields, buttonText, action, afterSubmit }) => {
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
       <Text style={styles.error}>{errorMessage}</Text>
-      {isSubmitting && (
-        <View style={styles.activityIndicatorContainer}>
-          <ActivityIndicator size="large" color="#3F5EFB" />
-        </View>
-      )}
       <Animated.View style={{ opacity }}>
+        {isSubmitting && (
+          <View style={styles.activityIndicatorContainer}>
+            <ActivityIndicator size="large" color="#3F5EFB" />
+          </View>
+        )}
         {fieldKeys.map((key) => {
           return (
             <Field
