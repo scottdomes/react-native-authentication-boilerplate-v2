@@ -7,12 +7,27 @@ import {
   Animated,
   ActivityIndicator,
 } from 'react-native';
+// import AnimatedGradient from './AnimatedGradient';
+import { GRADIENT_COLORS } from './constants';
+
+const orientation1 = {
+  start: { x: 0, y: 0 },
+  end: { x: 1, y: 0 },
+};
+
+const orientation2 = {
+  start: { x: 0, y: 0 },
+  end: { x: 5, y: 0 },
+};
 
 const SubmitButton = ({ title, onPress, isSubmitting }) => {
   const [offset] = useState(new Animated.Value(1));
   const [scale] = useState(new Animated.Value(1));
+  const [orientation, setOrientation] = useState(orientation1);
 
   const handlePress = async () => {
+    setOrientation(orientation2);
+
     Animated.spring(offset, {
       toValue: 5,
     }).start();
@@ -21,6 +36,7 @@ const SubmitButton = ({ title, onPress, isSubmitting }) => {
     }).start();
 
     await onPress();
+    setOrientation(orientation1);
     Animated.spring(offset, {
       toValue: 0,
     }).start();
@@ -38,13 +54,13 @@ const SubmitButton = ({ title, onPress, isSubmitting }) => {
   return (
     <TouchableWithoutFeedback onPressIn={handlePress}>
       <Animated.View style={{ transform, ...styles.container }}>
-        <View style={styles.container}>
-          {isSubmitting ? (
-            <ActivityIndicator size="small" color="#FFFFFF" />
-          ) : (
-            <Text style={styles.text}>{title}</Text>
-          )}
-        </View>
+          <View style={styles.container}>
+            {isSubmitting ? (
+              <ActivityIndicator size="small" color="#FFFFFF" />
+            ) : (
+              <Text style={styles.text}>{title}ss</Text>
+            )}
+          </View>
       </Animated.View>
     </TouchableWithoutFeedback>
   );
