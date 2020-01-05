@@ -1,5 +1,7 @@
 import React from 'react';
 import { Text, TextInput, View, StyleSheet, Animated } from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
+import { GRADIENT_COLORS } from './constants';
 
 export default class Field extends React.Component {
   position = new Animated.Value(0);
@@ -54,12 +56,25 @@ export default class Field extends React.Component {
         }}
       >
         <Text>{field.label}</Text>
-        <TextInput
-          style={styles.input}
-          {...field.inputProps}
-          value={value}
-          onChangeText={(text) => onChangeText(fieldName, text)}
-        />
+        <LinearGradient
+          colors={GRADIENT_COLORS}
+          start={{
+            x: 0,
+            y: 0,
+          }}
+          end={{
+            x: 1,
+            y: 0,
+          }}
+          style={styles.inputGradient}
+        >
+          <TextInput
+            style={styles.input}
+            {...field.inputProps}
+            value={value}
+            onChangeText={(text) => onChangeText(fieldName, text)}
+          />
+        </LinearGradient>
         <Text style={styles.error}>{error}</Text>
       </Animated.View>
     );
@@ -67,12 +82,15 @@ export default class Field extends React.Component {
 }
 
 const styles = StyleSheet.create({
+  inputGradient: {
+    padding: 3,
+    marginVertical: 3,
+  },
   input: {
     height: 40,
     width: 300,
     paddingHorizontal: 5,
     backgroundColor: 'white',
-    marginBottom: 5,
   },
   inputContainer: {
     marginBottom: 20,
@@ -81,6 +99,8 @@ const styles = StyleSheet.create({
       width: 0,
       height: 2,
     },
+    marginBottom: 5,
+
     shadowOpacity: 0.23,
     shadowRadius: 2.62,
     elevation: 4,
