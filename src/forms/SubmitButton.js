@@ -7,7 +7,7 @@ import {
   Animated,
   ActivityIndicator,
 } from 'react-native';
-// import AnimatedGradient from './AnimatedGradient';
+import AnimatedGradient from './AnimatedGradient';
 import { GRADIENT_COLORS } from './constants';
 
 const orientation1 = {
@@ -54,13 +54,19 @@ const SubmitButton = ({ title, onPress, isSubmitting }) => {
   return (
     <TouchableWithoutFeedback onPressIn={handlePress}>
       <Animated.View style={{ transform, ...styles.container }}>
+        <AnimatedGradient
+          orientation={orientation}
+          colors={GRADIENT_COLORS}
+          style={{ borderRadius: 8 }}
+        >
           <View style={styles.container}>
             {isSubmitting ? (
               <ActivityIndicator size="small" color="#FFFFFF" />
             ) : (
-              <Text style={styles.text}>{title}ss</Text>
+              <Text style={styles.text}>{title}</Text>
             )}
           </View>
+        </AnimatedGradient>
       </Animated.View>
     </TouchableWithoutFeedback>
   );
@@ -73,7 +79,6 @@ const styles = StyleSheet.create({
       width: 0,
       height: 2,
     },
-    backgroundColor: '#3F5EFB',
     shadowOpacity: 0.23,
     shadowRadius: 2.62,
     width: 250,

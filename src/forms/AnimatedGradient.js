@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, Animated } from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
 
 const styles = StyleSheet.create({
   component: {
