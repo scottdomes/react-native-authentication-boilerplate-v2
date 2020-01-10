@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, TextInput, View, StyleSheet, Animated } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
-import { GRADIENT_COLORS } from './constants';
+import { GRADIENT_COLORS, GRADIENT_ORIENTATIONS } from './constants';
+import AnimatedGradient from './AnimatedGradient';
 
 export default class Field extends React.Component {
   position = new Animated.Value(0);
@@ -43,7 +43,14 @@ export default class Field extends React.Component {
   }
 
   render() {
-    const { fieldName, field, value, onChangeText, error } = this.props;
+    const {
+      fieldName,
+      field,
+      value,
+      onChangeText,
+      error,
+      isSubmitting,
+    } = this.props;
     return (
       <Animated.View
         style={{
@@ -56,16 +63,11 @@ export default class Field extends React.Component {
         }}
       >
         <Text>{field.label}</Text>
-        <LinearGradient
+        <AnimatedGradient
+          orientation={
+            isSubmitting ? GRADIENT_ORIENTATIONS[1] : GRADIENT_ORIENTATIONS[0]
+          }
           colors={GRADIENT_COLORS}
-          start={{
-            x: 0,
-            y: 0,
-          }}
-          end={{
-            x: 1,
-            y: 0,
-          }}
           style={styles.inputGradient}
         >
           <TextInput
@@ -74,7 +76,7 @@ export default class Field extends React.Component {
             value={value}
             onChangeText={(text) => onChangeText(fieldName, text)}
           />
-        </LinearGradient>
+        </AnimatedGradient>
         <Text style={styles.error}>{error}</Text>
       </Animated.View>
     );
