@@ -6,8 +6,7 @@ class GradientHelper extends Component {
   render() {
     const {
       style,
-      color1,
-      color2,
+      colors,
       startX,
       startY,
       endX,
@@ -16,7 +15,7 @@ class GradientHelper extends Component {
     } = this.props;
     return (
       <LinearGradient
-        colors={[color1, color2]}
+        colors={colors}
         start={{
           x: startX,
           y: startY,
@@ -39,43 +38,30 @@ export default class AnimatedGradient extends Component {
   constructor(props) {
     super(props);
 
-    const { colors, orientation } = props;
+    const { orientation } = props;
     this.state = {
-      prevColors: colors,
       prevOrientation: orientation,
-      colors,
       orientation,
       tweener: new Animated.Value(0),
     };
   }
 
   static getDerivedStateFromProps(props, state) {
-    const { colors: prevColors, orientation: prevOrientation } = state;
-    const { colors, orientation } = props;
+    const { orientation: prevOrientation } = state;
+    const { orientation } = props;
     const tweener = new Animated.Value(0);
     return {
-      prevColors,
       prevOrientation,
-      colors,
       orientation,
       tweener,
     };
   }
 
   componentDidUpdate(prevProps) {
-    // if (!prevProps.isSubmitting && this.props.isSubmitting) {
-      const { tweener } = this.state;
-      Animated.timing(tweener, {
-        toValue: 1,
-      }).start();
-    // }
-
-    // if (prevProps.isSubmitting && !this.props.isSubmitting) {
-    //   const { tweener } = this.state;
-    //   Animated.timing(tweener, {
-    //     toValue: 0,
-    //   }).start();
-    // }
+    const { tweener } = this.state;
+    Animated.timing(tweener, {
+      toValue: 1,
+    }).start();
   }
 
   interpolate(outputRange) {
@@ -86,17 +72,9 @@ export default class AnimatedGradient extends Component {
   }
 
   render() {
-    const {
-      tweener,
-      prevColors,
-      prevOrientation,
-      colors,
-      orientation,
-    } = this.state;
+    const { prevOrientation, orientation } = this.state;
+    const { style, children, colors } = this.props;
 
-    const { style, children } = this.props;
-
-    // orientation interpolations
     const startXInterpolation = this.interpolate([
       prevOrientation.start.x,
       orientation.start.x,
@@ -120,8 +98,7 @@ export default class AnimatedGradient extends Component {
     return (
       <AnimatedGradientHelper
         style={style}
-        color1={colors[0]}
-        color2={colors[1]}
+        colors={colors}
         startX={startXInterpolation}
         startY={startYInterpolation}
         endX={endXInterpolation}

@@ -41,8 +41,6 @@ const SubmitButton = ({ title, onPress, isSubmitting }) => {
     <TouchableWithoutFeedback onPressIn={handlePress}>
       <Animated.View style={{ transform, ...styles.container }}>
         <AnimatedGradient
-          isSubmitting={isSubmitting}
-          orientations={GRADIENT_ORIENTATIONS}
           orientation={isSubmitting ? GRADIENT_ORIENTATIONS[1] : GRADIENT_ORIENTATIONS[0]}
           colors={GRADIENT_COLORS}
           style={{ borderRadius: 8 }}
